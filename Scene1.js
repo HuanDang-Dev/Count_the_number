@@ -34,7 +34,7 @@ class Scene1 extends Phaser.Scene{
     //load image and audio;
     preload() {
         // load image background;
-        this.load.image('backGround', 'assets/images/background/backGround.jpg');
+        this.load.image('backGround', 'assets/images/background/background.jpg');
         this.load.image('kodi', 'assets/images/background/kodi.png');
         this.load.image('appHome', 'assets/images/background/appHome.png');
         this.load.image('questionMark', 'assets/images/background/questionMark.png');
