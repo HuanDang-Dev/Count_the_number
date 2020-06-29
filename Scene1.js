@@ -24,6 +24,17 @@ var speak; // name speak audio
 var wrongAudio;
 var clickAudio;
 var clickAudioAnswer;
+var audioBG;
+var audioEnd;
+var audioConfig = {
+    mute: false,
+    volume: 2,
+    rate: 1,
+    detune: 0,
+    seek: 0,
+    loop: true,
+    delay: 0
+};
 
 class Scene1 extends Phaser.Scene{
 
@@ -33,55 +44,17 @@ class Scene1 extends Phaser.Scene{
 
     //load image and audio;
     preload() {
-        // load image background;
-        this.load.image('backGround', 'assets/images/background/background.jpg');
-        this.load.image('kodi', 'assets/images/background/kodi.png');
-        this.load.image('appHome', 'assets/images/background/appHome.png');
-        this.load.image('questionMark', 'assets/images/background/questionMark.png');
-        this.load.image('khanAcademyKid', "assets/images/background/khan.png");
-        this.load.image('car', "assets/images/background/car.png");
-
-        // load image audio;
-        this.load.image('speak 1', 'assets/images/imageAudio/speak 1.png');
-
-        //load audio
-        this.load.audio('phase 1','assets/audio/audioScene1/phase1.mp3');
-        this.load.audio('phase 2','assets/audio/audioScene1/phase2.mp3');
-        this.load.audio('phase 3','assets/audio/audioScene1/phase3.mp3');
-        this.load.audio('phase 4','assets/audio/audioScene1/phase4.mp3');
-        this.load.audio('phase 5','assets/audio/audioScene1/phase5.mp3');
-        this.load.audio('phase 6','assets/audio/audioScene1/phase6.mp3');
-        this.load.audio('answerPhase 1','assets/audio/audioScene1/answerPhase1.mp3');
-        this.load.audio('answerPhase 2','assets/audio/audioScene1/answerPhase2.mp3');
-        this.load.audio('answerPhase 3','assets/audio/audioScene1/answerPhase3.mp3');
-        this.load.audio('answerPhase 4','assets/audio/audioScene1/answerPhase4.mp3');
-        this.load.audio('answerPhase 5','assets/audio/audioScene1/answerPhase5.mp3');
-        this.load.audio('answerPhase 6','assets/audio/audioScene1/answerPhase6.mp3');
-        this.load.audio('wrong','assets/audio/audioScene1/wrong.mp3');
-
-        // load image number;
-        this.load.image('numberAnswer_1', 'assets/images/chooseACount/so_1.png');
-        this.load.image('numberAnswer_6', 'assets/images/chooseACount/so_6.png');
-        this.load.image('numberAnswer_5', 'assets/images/chooseACount/so_5.png');
-        this.load.image('number_10', 'assets/images/number/so10.png');
-        this.load.image('number_4', 'assets/images/number/so4.png');
-        this.load.image('number_5', 'assets/images/number/so5.png');
-        this.load.image('number_6', 'assets/images/number/so6.png');
-        this.load.image('ice 6', 'assets/images/choose/ice_6.png');
-        this.load.image('ice 4', 'assets/images/choose/ice_4.png');
-        this.load.image('ice 3', 'assets/images/choose/ice_3.png');
-        this.load.image('ice 5', 'assets/images/choose/ice_5.png');
-        this.load.image('ice 2', 'assets/images/choose/ice_2.png');
-        this.load.image('ice 1', 'assets/images/choose/ice_1.png');
-        this.load.image('dice 5', 'assets/images/dice/dice_5.png');
-        this.load.image('dice 4', 'assets/images/dice/dice_4.png');
-        this.load.image('dice 2', 'assets/images/dice/dice_2.png');
-        this.load.image('dice 1', 'assets/images/dice/dice_1.png');
-
+        // load image and audio;
+        this.load.pack('dataGame', 'assets/Data/dataGame.json');
+        
     }
 
     //create game;
     create(){
+        // load audio background;
+        audioBG = this.sound.add('audioBackGround');
+        audioBG.play(audioConfig);
+
         // add image background;
         this.background = this.add.image(0, 0, "backGround").setOrigin(0, 0).setScale(0.8);
         this.kodi = this.add.image(1080, 50, "kodi").setOrigin(0, 0).setScale(0.5);
@@ -122,7 +95,7 @@ class Scene1 extends Phaser.Scene{
         this.input.on('gameobjectout', function (pointer, gameObject) { gameObject.clearTint(); });
         
         this.countTime();
-        this.phase1();
+        this.phase3();
 
     }
 
@@ -309,11 +282,11 @@ class Scene1 extends Phaser.Scene{
 
             timedEvent1 = this.time.delayedCall(3000, function nextPhase(){
                 clickAudio.stop();
-                this.dice_5.destroy();
-                this.dice_4.destroy();
-                this.dice_1.destroy();
-                textSubtrahend.destroy();
-                textAnswer.destroy();
+                this.dice_5.destroy(true);
+                this.dice_4.destroy(true);
+                this.dice_1.destroy(true);
+                textSubtrahend.destroy(true);
+                textAnswer.destroy(true);
                 this.phase6();
             }, [], this)
         });
@@ -352,6 +325,8 @@ class Scene1 extends Phaser.Scene{
                 this.textQuestion.destroy();
                 this.textListen.destroy();
                 speak.destroy();
+                audioEnd = this.sound.add('audioEndGame');
+                audioEnd.play();
                 this.khanAcademyKid = this.add.image(-70, 215, "khanAcademyKid").setOrigin(0, 0).setScale(0.6);
                 this.textGameOver = this.add.text(280, 70, "Well ! You have completed the lesson !!!", {
                     font: "40px Arial", 
@@ -432,19 +407,6 @@ class Scene1 extends Phaser.Scene{
             if (gameObject.x >= 800 && gameObject.x <= 1000  && gameObject.y >= 300 && gameObject.y <= 600 ){
                 if(position ==  numberCheckPosition){
                     clickAudioAnswer.play();
-                    textNumber.destroy(true);
-                    textSubtrahend.destroy(true);
-                    textAnswer.destroy(true);
-                    dropImage.destroy(true);
-                    number_4.destroy(true);
-                    number_10.destroy(true);
-                    numberAnswer_1.destroy(true);
-                    numberAnswer_5.destroy(true);
-                    numberAnswer_6.destroy(true);
-                    sub1.destroy(true);
-                    sub2.destroy(true);
-                    equal1.destroy(true);
-                    equal2.destroy(true);
                     checkCorrect = 1;
                     
                     position = 0;
@@ -452,7 +414,6 @@ class Scene1 extends Phaser.Scene{
                         nextPhase3 = 1;
                     if (nextPhase3 == 2){    
                         nextPhase4 = 1;
-                        nextPhase3 = 0;
                     }
                 }
                 if (position == 1 || position == 3) {
@@ -461,7 +422,6 @@ class Scene1 extends Phaser.Scene{
                     gameObject.y = gameObject.input.dragStartY;
                 }
             }
-
         });
 
         this.input.on('dragend', function (pointer, gameObject, dropped) {
@@ -504,12 +464,43 @@ class Scene1 extends Phaser.Scene{
     //Update;
     update(){
         if (nextPhase3 == 1){
-            this.phase4();
             nextPhase3 = 2;
+            timedEvent1 = this.time.delayedCall( 3000, function nextPhase(){
+                textNumber.destroy(true);
+                textSubtrahend.destroy(true);
+                textAnswer.destroy(true);
+                dropImage.destroy(true);
+                number_4.destroy(true);
+                number_10.destroy(true);
+                numberAnswer_1.destroy(true);
+                numberAnswer_5.destroy(true);
+                numberAnswer_6.destroy(true);
+                sub1.destroy(true);
+                sub2.destroy(true);
+                equal1.destroy(true);
+                equal2.destroy(true);
+                this.phase4();
+            }, [], this)
+            
         }
         if (nextPhase4 == 1){
-            this.phase5();
-            nextPhase4 = 2;
+            nextPhase4 = 0;
+            timedEvent1 = this.time.delayedCall( 3000, function nextPhase(){
+                textNumber.destroy(true);
+                textSubtrahend.destroy(true);
+                textAnswer.destroy(true);
+                dropImage.destroy(true);
+                number_4.destroy(true);
+                number_10.destroy(true);
+                numberAnswer_1.destroy(true);
+                numberAnswer_5.destroy(true);
+                numberAnswer_6.destroy(true);
+                sub1.destroy(true);
+                sub2.destroy(true);
+                equal1.destroy(true);
+                equal2.destroy(true);
+                this.phase5();
+            }, [], this)
         }
         if (checkCorrect == 1){
             this.animationBall();
