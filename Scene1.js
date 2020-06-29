@@ -52,7 +52,7 @@ class Scene1 extends Phaser.Scene{
     //create game;
     create(){
         // load audio background;
-        audioBG = this.sound.add('audioBackGround');
+        audioBG = this.sound.add('bgMusic');
         audioBG.play(audioConfig);
 
         // add image background;
@@ -95,7 +95,7 @@ class Scene1 extends Phaser.Scene{
         this.input.on('gameobjectout', function (pointer, gameObject) { gameObject.clearTint(); });
         
         this.countTime();
-        this.phase3();
+        this.phase1();
 
     }
 
